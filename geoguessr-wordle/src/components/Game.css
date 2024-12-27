@@ -1,0 +1,296 @@
+/* General Reset */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: rgba(0, 0, 0, 0.918);
+  color: white;
+  text-align: center;
+}
+
+/* Header */
+header {
+  background-color: #222;
+  padding: 10px 20px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #4caf50;
+  height: 50px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  font-style: italic;
+}
+
+/* Headings */
+h1 {
+  font-size: 2.5em;
+  margin: 80px 0 20px; /* Adjust margin to account for the fixed header */
+}
+
+h2 {
+  font-size: 1.8em;
+  margin: 20px 0;
+  color: #4caf50;
+}
+
+h3 {
+  margin-top: 30px;
+  font-size: 1.5em;
+  color: #ffa500;
+}
+
+/* Text Elements */
+p {
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.loading {
+  font-size: 20px;
+  font-style: italic;
+  color: #ff5722;
+}
+
+/* Input Fields */
+input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  font-size: 16px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Lists */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  display: inline-block;
+  text-align: left;
+}
+
+ul li {
+  background-color: #333;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  color: #ddd;
+}
+
+/* Containers */
+div {
+  margin-top: 15px;
+}
+
+/* Iframe */
+iframe {
+  border: 5px solid #555;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #141414;
+  padding: 20px;
+  border-radius: 5px;
+  width: 500px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #4caf50;
+}
+
+.modal-content button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #358138;
+}
+
+/* Game Section */
+.game-container {
+  font-family: Arial, sans-serif;
+}
+
+.game-header {
+  height: 35px;
+  width : 98%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #161515;
+  border-bottom: 1px solid #ddd;
+}
+
+.game-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+.header-buttons {
+  display: flex;
+  gap: 5px; /* Add space between buttons */
+  align-items: center; /* Aligns vertically within the header */
+  position: absolute;
+  right: 5px; /* Positions the buttons closer to the right edge */
+  top: 2px; /* Moves the buttons upwards */
+}
+.header-buttons button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.game-box {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  background-color: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  height: 1000px;
+}
+
+.guess-section {
+  margin-top: 20px;
+}
+
+.guess-section input {
+  padding: 8px;
+  width: 70%;
+  margin-right: 10px;
+}
+
+.guess-section button {
+  padding: 8px 15px;
+}
+
+.feedback {
+  color: rgb(255, 255, 255);
+  margin-top: 20px;
+}
+
+.guess-history ul {
+  list-style: none;
+  padding: 0;
+  display: block;
+  height: 250px;
+  justify-content: center;
+}
+
+.guess-history ul li {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  background-color: #131212;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 15px;
+  font-size: 16px;
+  width: 250px;
+  min-width: 100px; /* Make them wider */
+  text-align: center;
+  margin-bottom: 10px;
+}
+/* Combine all guesses into a box */
+.guess-history {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #222;
+  border: 2px solid #4caf50;
+  border-radius: 10px;
+  width: 280px;
+  max-width: 600px; /* Limit the width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.guess-history h3 {
+  margin-bottom: 10px;
+  color: #4caf50;
+}
+/* Align the dropdown suggestions below the input field */
+datalist {
+  position: absolute;
+  top: 100%; /* Move it below the input field */
+  left: 0;
+  width: 100%; /* Match the input width */
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 10;
+  max-height: 150px; /* Optional: Limit height for scrolling */
+  overflow-y: auto;
+}
+
+datalist option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+    font-size: 24px;
+    padding: 10px;
+  }
+
+  .game-box {
+    padding: 15px;
+    margin: 15px;
+    max-width: 90%;
+  }
+
+  input[type="text"] {
+    width: 90%;
+  }
+
+  button {
+    padding: 8px 15px;
+  }
+}

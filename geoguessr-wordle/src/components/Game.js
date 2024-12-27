@@ -1,19 +1,46 @@
-// src/components/Game.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./Game.css";
 
 const Game = () => {
   const [country, setCountry] = useState(null);
   const [playerGuess, setPlayerGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [guesses, setGuesses] = useState([]);
+  const [countryList, setCountryList] = useState([]);
+  const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
+  const [isWrongGuessModalOpen, setIsWrongGuessModalOpen] = useState(false);
+  const [isCorrectGuessModalOpen, setIsCorrectGuessModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [wrongGuessCount, setWrongGuessCount] = useState(0);
+  const maxWrongGuesses = 5;
 
-  // Fetch the random country when the game starts
+  // Fetch the initial random country and the list of countries
   useEffect(() => {
-    axios.get("http://localhost:8080/api/game/start").then((response) => {
-      setCountry(response.data);
-    });
+    fetchCountry();
+    fetchCountryList();
   }, []);
+
+  // Fetch a new random country
+  const fetchCountry = () => {
+    axios
+      .get("http://localhost:8080/api/game/start")
+      .then((response) => {
+        setCountry(response.data);
+        setGuesses([]);
+        setFeedback("");
+        setWrongGuessCount(0);
+      })
+      .catch((error) => console.error("Error fetching country:", error));
+  };
+
+  // Fetch the list of all countries
+  const fetchCountryList = () => {
+    axios
+      .get("http://localhost:8080/api/game")
+      .then((response) => setCountryList(response.data))
+      .catch((error) => console.error("Error fetching country list:", error));
+  };
 
   // Handle submitting a guess
   const handleGuess = () => {
@@ -23,58 +50,139 @@ const Game = () => {
     }
 
     axios
-      .post(`http://localhost:8080/api/game/guess`, null, {
+      .post("http://localhost:8080/api/game/guess", null, {
         params: { playerGuess },
       })
       .then((response) => {
         setFeedback(response.data);
         setGuesses([...guesses, playerGuess]);
+
+        if (response.data.includes("Correct Guess!")) {
+          // Correct guess
+          setModalMessage("Congratulations! You guessed the country correctly!");
+          setIsCorrectGuessModalOpen(true); // Open correct guess modal
+        } else {
+          // Wrong guess, increase counter and check if game over
+          setWrongGuessCount((prevCount) => {
+            const newCount = prevCount + 1;
+            if (newCount >= maxWrongGuesses) {
+              // End game if max wrong guesses are reached
+              setModalMessage("Game Over! You've used all your guesses.");
+              setIsWrongGuessModalOpen(true); // Open wrong guess modal
+            }
+            return newCount;
+          });
+        }
+
         setPlayerGuess("");
       })
-      .catch((error) => {
-        console.error("Error submitting guess:", error);
-      });
+      .catch((error) => console.error("Error submitting guess:", error));
+  };
+
+  // Handle starting a new game
+  const startNewGame = () => {
+    setIsHowToPlayModalOpen(false);
+    setIsWrongGuessModalOpen(false);
+    setIsCorrectGuessModalOpen(false); // Close all modals
+    fetchCountry();
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>GeoGuessr Wordle</h1>
+    <div className="game-container">
+      <header className="game-header">
+        <span className="game-title">Dople</span>
+        <div className="header-buttons">
+          <button onClick={fetchCountry}>Generate Country</button>
+          <button onClick={() => setIsHowToPlayModalOpen(true)}>How to Play</button>
+        </div>
+      </header>
 
-      {country ? (
-        <>
-          <h2>Street View: Guess the Country!</h2>
-          {/* Embed Google Street View */}
-          <iframe
-            title="Street View"
-            width="600"
-            height="400"
-            src={`https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBFUfBR5rTQtLEyNyMWDRwM4gFdUpgrkp8&location=${country.latitude},${country.longitude}`}
-            allowFullScreen
-          ></iframe>
+      <div className="game-box">
+        {country ? (
+          <>
+            <h2>Street View: Guess the Country!</h2>
+            <iframe
+              title="Street View"
+              width="600"
+              height="400"
+              src={`https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBFUfBR5rTQtLEyNyMWDRwM4gFdUpgrkp8&location=${country.latitude},${country.longitude}`}
+              allowFullScreen
+            ></iframe>
 
-          <div>
-            <input
-              type="text"
-              placeholder="Enter your guess (country name)"
-              value={playerGuess}
-              onChange={(e) => setPlayerGuess(e.target.value)}
-            />
-            <button onClick={handleGuess}>Submit Guess</button>
+            <div className="guess-section">
+              <input
+                type="text"
+                list="country-options"
+                className="guess-input"
+                placeholder="Enter your guess (country name)"
+                value={playerGuess}
+                onChange={(e) => setPlayerGuess(e.target.value)}
+              />
+              <datalist id="country-options">
+                {countryList.map((countryName, index) => (
+                  <option key={index} value={countryName} />
+                ))}
+              </datalist>
+              <button onClick={handleGuess} className="guess-button">
+                Submit Guess
+              </button>
+            </div>
+
+            {feedback && <p className="feedback">{feedback}</p>}
+
+            <div className="guess-history">
+              <h3>Your Previous Guesses:</h3>
+              <ul>
+                {guesses.map((guess, index) => (
+                  <li key={index}>{guess}</li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : (
+          <p className="loading">Loading game...</p>
+        )}
+      </div>
+
+      {/* Modal for how to play */}
+      {isHowToPlayModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>How to Play</h2>
+            <p>
+              Welcome to Dople! Your goal is to guess the country based on the Street View image
+              provided. Follow these steps:
+            </p>
+            
+            <ol>View the Street View image carefully.</ol>
+            <ol>Type the name of the country you think it is in the guess box.</ol>
+              
+            <ol>Submit your guess. You'll receive feedback about how close your guess is.</ol>
+              <ol>Keep guessing until you identify the correct country!</ol>
+            
+            <button onClick={() => setIsHowToPlayModalOpen(false)}>Close</button>
           </div>
+        </div>
+      )}
 
-          {feedback && <p style={{ marginTop: "20px" }}>{feedback}</p>}
-
-          <div>
-            <h3>Your Previous Guesses:</h3>
-            <ul>
-              {guesses.map((guess, index) => (
-                <li key={index}>{guess}</li>
-              ))}
-            </ul>
+      {/* Modal for wrong guess */}
+      {isWrongGuessModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>{modalMessage}</h2>
+            <button onClick={startNewGame}>Start a New Game</button>
           </div>
-        </>
-      ) : (
-        <p>Loading game...</p>
+        </div>
+      )}
+
+      {/* Modal for correct guess */}
+      {isCorrectGuessModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>{modalMessage}</h2>
+            <button onClick={startNewGame}>Start a New Game</button>
+          </div>
+        </div>
       )}
     </div>
   );

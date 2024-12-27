@@ -26,7 +26,9 @@ public class GameService {
         List<Country> countries = countryRepository.findAll();
         return countries.get(random.nextInt(countries.size()));
     }
-
+    public List<Country> getAllCountries() {
+        return countryRepository.findAll();
+    }
     public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Radius of the Earth in kilometers
         double latDistance = Math.toRadians(lat2 - lat1);

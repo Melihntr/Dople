@@ -1,5 +1,7 @@
 package com.dople.dople.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,9 +41,18 @@ public class GameController {
         Guess guess = gameService.saveGuess(playerGuess, currentCountry, guessNumber);
 
         if (guess.getDistance() == 0) {
-            return "Correct! The country was " + currentCountry.getName();
+            return "Correct Guess!" +" Distance: " + Math.round(guess.getDistance())+ " km.";
         }
 
         return "Wrong! Distance: " + Math.round(guess.getDistance()) + " km.";
     }
+
+    @GetMapping
+    public List<String> getAllCountryNames() {
+        return gameService.getAllCountries()
+                             .stream()
+                             .map(Country::getName)
+                             .toList();
+    }
 }
+        
