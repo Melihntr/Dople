@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./Game.css";
 
@@ -15,6 +15,9 @@ const Game = () => {
   const [wrongGuessCount, setWrongGuessCount] = useState(0);
   const maxWrongGuesses = 5;
 
+  const streetViewRef = useRef(null);
+  let panorama = useRef(null);
+
   // Fetch the initial random country and the list of countries
   useEffect(() => {
     fetchCountry();
@@ -30,6 +33,9 @@ const Game = () => {
         setGuesses([]);
         setFeedback("");
         setWrongGuessCount(0);
+
+        // Initialize Street View with the new country location
+        initStreetView(response.data.latitude, response.data.longitude);
       })
       .catch((error) => console.error("Error fetching country:", error));
   };
@@ -42,6 +48,21 @@ const Game = () => {
       .catch((error) => console.error("Error fetching country list:", error));
   };
 
+  // Initialize Google Maps Street View with compass and fullscreen controls
+  const initStreetView = (latitude, longitude) => {
+    if (streetViewRef.current) {
+      panorama.current = new window.google.maps.StreetViewPanorama(streetViewRef.current, {
+        position: { lat: latitude, lng: longitude },
+        pov: { heading: 0, pitch: 0 },
+        disableDefaultUI: true, // Enable default UI controls
+        fullscreenControl: false, // Enable fullscreen control
+        linksControl: false, // Disable navigation links
+        motionTracking: true, // Enable motion tracking
+        motionTrackingControl: false, // Disable motion tracking control
+        panControl: true, // Add pan control for the compass
+      });
+    }
+  }; 
   // Handle submitting a guess
   const handleGuess = () => {
     if (!playerGuess) {
@@ -58,15 +79,12 @@ const Game = () => {
         setGuesses([...guesses, playerGuess]);
 
         if (response.data.includes("Correct Guess!")) {
-          // Correct guess
           setModalMessage("Congratulations! You guessed the country correctly!");
           setIsCorrectGuessModalOpen(true); // Open correct guess modal
         } else {
-          // Wrong guess, increase counter and check if game over
           setWrongGuessCount((prevCount) => {
             const newCount = prevCount + 1;
             if (newCount >= maxWrongGuesses) {
-              // End game if max wrong guesses are reached
               setModalMessage("Game Over! You've used all your guesses.");
               setIsWrongGuessModalOpen(true); // Open wrong guess modal
             }
@@ -101,13 +119,16 @@ const Game = () => {
         {country ? (
           <>
             <h2>Street View: Guess the Country!</h2>
-            <iframe
-              title="Street View"
-              width="600"
-              height="400"
-              src={`https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBFUfBR5rTQtLEyNyMWDRwM4gFdUpgrkp8&location=${country.latitude},${country.longitude}`}
-              allowFullScreen
-            ></iframe>
+            <div
+              ref={streetViewRef}
+              style={{
+                width: "750px",
+                height: "450px",
+                margin: "0 auto",
+                borderRadius: "10px",
+                border: "1px solid #ccc",
+              }}
+            ></div>
 
             <div className="guess-section">
               <input
@@ -153,13 +174,12 @@ const Game = () => {
               Welcome to Dople! Your goal is to guess the country based on the Street View image
               provided. Follow these steps:
             </p>
-            
-            <ol>View the Street View image carefully.</ol>
-            <ol>Type the name of the country you think it is in the guess box.</ol>
-              
-            <ol>Submit your guess. You'll receive feedback about how close your guess is.</ol>
-              <ol>Keep guessing until you identify the correct country!</ol>
-            
+            <ul>
+              <li>View the Street View image carefully.</li>
+              <li>Type the name of the country you think it is in the guess box.</li>
+              <li>Submit your guess. You'll receive feedback about how close your guess is.</li>
+              <li>Keep guessing until you identify the correct country!</li>
+            </ul>
             <button onClick={() => setIsHowToPlayModalOpen(false)}>Close</button>
           </div>
         </div>
