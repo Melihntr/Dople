@@ -1,4 +1,4 @@
-#Dople 🌍
+# Dople 🌍
 
 Dople is a geography guessing game!
 You are shown a random location using Google Maps, and your challenge is to:
@@ -9,7 +9,7 @@ Guess the country.
 
 Sharpen your world knowledge — one pin at a time!
 
-#Tech Stack
+# Tech Stack
 
 Layer	Technology
 Backend	Spring Boot
@@ -59,7 +59,7 @@ REACT_APP_BACKEND_URL=http://localhost:8080
 Start the React app:
 npm start
 
-Google Maps API Key Warning ⚠️
+# Google Maps API Key Warning ⚠️
 The Google Maps API key is required to load map views.
 
 Your key may expire or hit usage limits if billing is not set up.
@@ -74,7 +74,7 @@ Restrict your key to only the necessary APIs (like Maps JavaScript API).
 
 👉 Learn more about API key management
 
-How to Play 🎮
+# How to Play 🎮
 A random coordinate appears on Google Maps.
 
 Guess the country it belongs to.
