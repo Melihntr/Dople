@@ -1,4 +1,4 @@
-Dople 🌍
+#Dople 🌍
 
 Dople is a geography guessing game!
 You are shown a random location using Google Maps, and your challenge is to:
@@ -9,7 +9,7 @@ Guess the country.
 
 Sharpen your world knowledge — one pin at a time!
 
-Tech Stack
+#Tech Stack
 
 Layer	Technology
 Backend	Spring Boot
