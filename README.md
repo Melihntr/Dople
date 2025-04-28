@@ -12,11 +12,17 @@ Sharpen your world knowledge — one pin at a time!
 # Tech Stack
 
 Layer	Technology
+
 Backend	Spring Boot
+
 Frontend	React.js
+
 Database	PostgreSQL
+
 Map Display	Google Maps JavaScript API
-Setup Instructions
+
+
+## Setup Instructions
 
 1. Clone the Repository
 git clone https://github.com/Melihntr/Dople.git
